@@ -240,6 +240,6 @@ $ ./vSphere.py -f <VSPHERE LABEL IN CONFIG FILE> -m powercycle -r <REGEX TO MATC
 License
 ----
 
-> TBC - Apache?? MIT??
+> MIT
 
 [here]:http://lonesysadmin.net/2013/03/26/preparing-linux-template-vms/
