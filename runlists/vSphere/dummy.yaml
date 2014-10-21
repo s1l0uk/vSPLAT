@@ -1,0 +1,43 @@
+---
+- Instance1:
+  name: @DC_LOWER@-awesome-001
+  order: serial #Build in front of your eyes
+  template: Super_awesome_base_template
+  memory: 4096
+  cpu: 2
+  domain: @DOMAIN@
+  ip: 1.1.1.1
+  subnet: 255.255.255.0
+  gw: 1.1.1.254
+  folder: /@DC_UPPER@/VMs
+  datacentre: @DC_UPPER@-DC
+  datastore: @DC_UPPER@_DATA_001
+  resourcepool: Resources
+  notes: My Super Awesome Server!
+  vlan: e1000:@DC_UPPER@-Awesome-VLAN-123
+  scripts:
+    - ./scripts/automation.sh #Uploads and runs the requested script
+  artifacts:
+    - ./artifacts/resources.zip #Uploades the resources.zip file to the created instance
+  commands:
+- Instance2:
+  order: parallel #Builds in a background thread
+  name: @DC_LOWER@-epic-001
+  template: Super_awesome_base_template
+  memory: 2048
+  cpu: 1
+  domain: @DOMAIN@
+  ip: 1.1.1.2
+  subnet: 255.255.255.0
+  gw: 1.1.1.254
+  folder: /@DC_UPPER@/VMs
+  datacentre: @DC_UPPER@-DC
+  datastore: @DC_UPPER@_DATA_001
+  resourcepool: Resources
+  notes: My Super Epic Server!
+  vlan: e1000:@DC_UPPER@-Awesome-VLAN-123
+  scripts:
+    - ./scripts/bash_provision.sh #Uploads and runs the requested script
+  artifacts:
+  commands:
+    - /bin/ls -lash /home/ #Runs the ls command - MUST be fully qualified path name!

@@ -1,0 +1,12 @@
+---
+vsphere:
+  vSphere-B:
+    username: 'username'
+    password: "" #Leave blank to be prompted
+    hostname: "1.1.1.1"
+    port: 443
+  vSphere-A:
+    username: 'username'
+    password: ""
+    hostname: "1.1.1.2"
+    port: 443
