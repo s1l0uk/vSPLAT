@@ -59,7 +59,7 @@ pip install -r requirements.txt
 
 **config file**
 
-> Fill in the YAML configuration to give the script the needED parameters to connect to your vSphere API
+> Fill in the YAML configuration to give the script the needed parameters to connect to your vSphere API
 
 ```
 ---
