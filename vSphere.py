@@ -853,3 +853,5 @@ if __name__ == "__main__":
     vsphere.add_param("-T", "--tokenize", help="Action to decide if a script that you are running on the Virtual Instance needs to be de-tokenized - Requires a definitions.py file", default=None, required=False, action="store_true")
     vsphere.add_param("-TC", "--tokenize-config", help="Action to decide if a run list being processed should be de-tokenized - Requires a definitions.py file", default=None, required=False, action="store_true")
     vsphere.run()
+
+
