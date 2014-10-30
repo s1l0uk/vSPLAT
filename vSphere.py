@@ -813,6 +813,9 @@ class VsphereTool(LoggingApp):
                     if order == "serial":
                         self.log.info("Serial boot of " + extra_data['name'])
                         self.create(connection, extra_data, creds)
+                        if len(t) > 0:
+                            self.log.info("Waiting for previous Parallel threads to complete")
+                            t.join()
                     elif order == "parallel":
                         self.log.info("Parallel boot of " + extra_data['name'])
                         t = Thread(target=self.create, args=[connection, extra_data, creds])
@@ -823,9 +826,9 @@ class VsphereTool(LoggingApp):
                     else:
                         self.log.error("Did not recognise option " + str(order) + " - Skipping!")
                         continue
-                    for t in threads:
-                        self.log.info("Completing background threads: " + str(t.name))
-                        t.join()
+                for t in threads:
+                    self.log.info("Completing background threads: " + str(t.name))
+                    t.join()
         else:
             message = "Please choose a Valid Mode! - You have selected %s" % mode
             self.log.debug(message)
