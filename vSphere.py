@@ -322,7 +322,7 @@ class VsphereTool(LoggingApp):
         try:
             if clone.info.error.msg == "The name '" + vm_name + "' already exists.":
                 self.log.error("The instance already exists")
-                if vm.runtime.powerState != "poweredOn":
+                if vm.runtime.powerState == "poweredOn":
                     self.log.info(vm_name + ": Powering on - Assumed configured and moving on to the next! - please delete instance and rerun if this is not the case!")
                     vm.PowerOnVM_Task()
                     return "exists"
