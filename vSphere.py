@@ -269,16 +269,7 @@ class VsphereTool(LoggingApp):
         dvs_port_connection.switchUuid= pg_obj.config.distributedVirtualSwitch.uuid
         nicspec.device.backing = vim.vm.device.VirtualEthernetCard.DistributedVirtualPortBackingInfo()
         nicspec.device.backing.port = dvs_port_connection
-        #nicspec.device.backing = vim.vm.device.VirtualEthernetCard.NetworkBackingInfo()
-        #try:
-        #    nicspec.device.backing.network = self.get_elements_regexed(conn, vim.Network, vlan)[0]
-        #except IndexError as e:
-        #    self.log.debug(e)
-        #    self.log.error(vm_name + ": Could not find requested Network to attach to... Skipping!")
-        #    return
-        #nicspec.device.backing.deviceName = vlan
         nicspec.device.connectable = vim.vm.device.VirtualDevice.ConnectInfo()
-        #nicspec.device.backing.useAutoDetect = True
         nicspec.device.connectable.startConnected = True
         nicspec.device.connectable.allowGuestControl = True
         devices.append(nicspec)
@@ -316,6 +307,12 @@ class VsphereTool(LoggingApp):
             return "error"
         if state == "error":
             self.log.error("Whoops! Your vSphere seems to be having a funny moment")
+            try:
+                self.log.error(clone.info.error.msg)
+            except:
+                self.log.error("No Error - Must be underlying host issues... will try again!")
+                self.create(conn,extra_data, creds)
+                return
             if clone.info.error.msg == "Cannot connect to host.":
                 vm.Destroy()
                 self.log.error("Delete the VM and try again?")
@@ -544,7 +541,11 @@ class VsphereTool(LoggingApp):
                 attrib = vim.vm.guest.FileManager.FileAttributes()
                 theFile = artifact.split("/")[-1]
                 url = "/tmp/" + theFile
-                gateway = content.guestOperationsManager.fileManager.InitiateFileTransferToGuest(overwrite=True,fileSize=os.path.getsize(artifact),fileAttributes=attrib,guestFilePath=url, vm=vm,auth=creds)
+                try:
+                    gateway = content.guestOperationsManager.fileManager.InitiateFileTransferToGuest(overwrite=True,fileSize=os.path.getsize(artifact),fileAttributes=attrib,guestFilePath=url, vm=vm,auth=creds)
+                except:
+                    self.log.error("There was a problem - trying again...")
+                    self.drop_a_file(creds,regex,artifacts)
                 self.log.debug(gateway)
                 headers =   {'Content-Type': 'application/octet-stream'}
                 with open(artifact, "r") as f:
